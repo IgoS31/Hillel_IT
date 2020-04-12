@@ -8,38 +8,47 @@
 Прототип енота должен уметь воровать =)
 */
 
-let Animal = {
-    sex: "male",
+function Animal(sex) {
+  this.sex = sex;
+}
 
-    run() {
-        console.log("Running");
-    },
-
-    jump() {
-        console.log("Jumping");
-    }
+Animal.prototype.run = function() {
+  console.log("Running");
 };
 
-let Mammal = {
-    __proto__: Animal,
-
-    givesMilk() {
-        this.sex === "male"
-            ? console.log("Gives no milk")
-            : console.log("Gives milk");
-    }
+Animal.prototype.jump = function() {
+  console.log("Jumping");
 };
 
-let Raccoon = {
-    __proto__: Mammal,
+function Mammal(sex) {
+  Animal.call(this, sex);
+}
 
-    stealing() {
-        console.log("Raccoon stole your food!");
-    }
+Mammal.prototype = Object.create(Animal.prototype);
+Mammal.prototype.constructor = Mammal;
+
+Mammal.prototype.givesMilk = function() {
+  this.sex === "male"
+    ? console.log("Gives no milk")
+    : console.log("Gives milk");
 };
 
-console.log(Raccoon.sex);
-Raccoon.run();
-Raccoon.jump();
-Raccoon.givesMilk();
-Raccoon.stealing();
+function Raccoon(sex) {
+  Mammal.call(this, sex);
+}
+
+Raccoon.prototype = Object.create(Mammal.prototype);
+Raccoon.prototype.constructor = Raccoon;
+
+Raccoon.prototype.stealing = function() {
+  console.log("Raccoon stole your food!");
+};
+
+//tests
+let enotAnton = new Raccoon("male");
+let enotihaValeria = new Raccoon("female");
+enotAnton.run();
+enotAnton.jump();
+enotAnton.givesMilk();
+enotihaValeria.givesMilk();
+enotAnton.stealing();
